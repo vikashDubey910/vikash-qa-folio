@@ -1,10 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Download, Mail, Phone } from "lucide-react";
 import profileImage from "@/assets/vikash-profile.jpg";
-
 const Hero = () => {
-  return (
-    <section id="home" className="min-h-screen flex items-center justify-center px-4 py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+  return <section id="home" className="min-h-screen flex items-center justify-center px-4 py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
       <div className="container max-w-6xl">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 order-2 md:order-1">
@@ -51,17 +49,11 @@ const Hero = () => {
           <div className="order-1 md:order-2 flex justify-center">
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary to-accent rounded-full blur-2xl opacity-20 animate-pulse" />
-              <img
-                src={profileImage}
-                alt="Vikash Kumar Dubey - QA Engineer"
-                className="relative w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-card shadow-2xl"
-              />
+              
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
