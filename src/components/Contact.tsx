@@ -7,6 +7,13 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import emailjs from "@emailjs/browser";
+import { z } from "zod";
+
+const contactSchema = z.object({
+  name: z.string().trim().min(1, "Name is required").max(100, "Name must be less than 100 characters"),
+  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
+  message: z.string().trim().min(1, "Message is required").max(1000, "Message must be less than 1000 characters")
+});
 
 const Contact = () => {
   const { toast } = useToast();
@@ -22,13 +29,15 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
+      const validatedData = contactSchema.parse(formData);
+
       await emailjs.send(
         "service_p5cjvgn",
         "template_ltj61t5",
         {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
+          from_name: validatedData.name,
+          from_email: validatedData.email,
+          message: validatedData.message,
           to_name: "Vikash Kumar Dubey"
         },
         "81ER_VuH0_SlxnOu2"
@@ -41,11 +50,19 @@ const Contact = () => {
 
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again or email me directly.",
-        variant: "destructive",
-      });
+      if (error instanceof z.ZodError) {
+        toast({
+          title: "Validation Error",
+          description: error.errors[0].message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again or email me directly.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
