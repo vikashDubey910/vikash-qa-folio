@@ -1,8 +1,56 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
 const Contact = () => {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: ""
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      await emailjs.send(
+        "service_p5cjvgn",
+        "template_ltj61t5",
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          message: formData.message,
+          to_name: "Vikash Kumar Dubey"
+        },
+        "81ER_VuH0_SlxnOu2"
+      );
+
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for reaching out. I'll get back to you soon!",
+      });
+
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again or email me directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <section id="contact" className="py-20 px-4 bg-background">
       <div className="container max-w-6xl">
@@ -56,26 +104,45 @@ const Contact = () => {
           </Card>
           
           <Card className="p-8 bg-gradient-to-br from-primary/5 to-accent/5 border-primary/20">
-            <h3 className="font-semibold text-xl mb-6">Ready to Collaborate?</h3>
-            <p className="text-muted-foreground mb-6">
-              I'm actively seeking entry-level QA positions where I can apply my testing skills 
-              and grow as a quality assurance professional. Whether it's manual testing, test case 
-              creation, or defect tracking, I'm eager to contribute to your team's success.
-            </p>
-            <div className="space-y-4">
-              <Button className="w-full gap-2" size="lg" asChild>
-                <a href="mailto:dubeyvikash910@gmail.com">
-                  <Send className="w-4 h-4" />
-                  Send Me an Email
-                </a>
+            <h3 className="font-semibold text-xl mb-6">Send a Message</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="your.email@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="message">Message</Label>
+                <Textarea
+                  id="message"
+                  placeholder="Tell me about the opportunity or how we can work together..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required
+                  rows={5}
+                />
+              </div>
+              <Button type="submit" className="w-full gap-2" size="lg" disabled={isSubmitting}>
+                <Send className="w-4 h-4" />
+                {isSubmitting ? "Sending..." : "Send Message"}
               </Button>
-              <Button variant="outline" className="w-full gap-2" size="lg" asChild>
-                <a href="/assets/vikash-cv.pdf" download>
-                  <Mail className="w-4 h-4" />
-                  Request Full CV
-                </a>
-              </Button>
-            </div>
+            </form>
           </Card>
         </div>
       </div>
