@@ -2,14 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 
 const Hero = () => {
-  const handleDownloadCV = () => {
-  const link = document.createElement("a");
-  link.href = "https://raw.githubusercontent.com/vikashDubey910/vikash-qa-folio/main/assets/VIKASH_QA_RESUME.pdf";
-  link.download = "Vikash_Kumar_Dubey_Resume.pdf";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+ const handleDownloadCV = () => {
+    const link = document.createElement("a");
+    link.href = "https://raw.githubusercontent.com/vikashDubey910/vikash-qa-folio/main/assets/VIKASH_QA_RESUME.pdf";
+    link.download = "VIKASH_QA_RESUME.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 };
+
 
   return (
     <section className="min-h-screen flex items-center justify-center px-4 py-20">
