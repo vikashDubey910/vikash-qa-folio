@@ -4,7 +4,7 @@ import { Download } from "lucide-react";
 const Hero = () => {
  const handleDownloadCV = () => {
     const link = document.createElement("a");
-    link.href = "./assets/VIKASH_QA_RESUME.pdf";
+    link.href = "https://vikashdubey910.github.io/assets/VIKASH_QA_RESUME.pdf";
     link.download = "VIKASH_QA_RESUME.pdf";
     document.body.appendChild(link);
     link.click();
